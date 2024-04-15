@@ -1,0 +1,84 @@
+project-folder/
+│
+├── public/
+│   ├── index.html
+│   └── ...
+│
+├── src/
+│   ├── components/
+│   │   ├── Header/
+│   │   │   ├── Header.js
+│   │   │   └── Header.scss (hoặc .styled.js)
+│   │   ├── Sidebar/
+│   │   │   ├── Sidebar.js
+│   │   │   └── Sidebar.scss (hoặc .styled.js)
+│   │   ├── TodoList/
+│   │   │   ├── TodoList.js
+│   │   │   └── TodoList.scss (hoặc .styled.js)
+│   │   ├── TaskDetail/
+│   │   │   ├── TaskDetail.js
+│   │   │   └── TaskDetail.scss (hoặc .styled.js)
+│   │   ├── CreateTask/
+│   │   │   ├── CreateTask.js
+│   │   │   └── CreateTask.scss (hoặc .styled.js)
+│   │   └── ...
+│   │
+│   ├── containers/
+│   │   ├── App/
+│   │   │   ├── App.js
+│   │   │   └── App.scss (hoặc .styled.js)
+│   │   ├── AllTasks/
+│   │   │   ├── AllTasks.js
+│   │   │   └── AllTasks.scss (hoặc .styled.js)
+│   │   ├── NewTasks/
+│   │   │   ├── NewTasks.js
+│   │   │   └── NewTasks.scss (hoặc .styled.js)
+│   │   ├── DoingTasks/
+│   │   │   ├── DoingTasks.js
+│   │   │   └── DoingTasks.scss (hoặc .styled.js)
+│   │   ├── DoneTasks/
+│   │   │   ├── DoneTasks.js
+│   │   │   └── DoneTasks.scss (hoặc .styled.js)
+│   │   └── ...
+│   │
+│   ├── store/
+│   │   ├── actions/
+│   │   │   ├── actionTypes.js
+│   │   │   ├── todoActions.js
+│   │   │   └── ...
+│   │   ├── reducers/
+│   │   │   ├── index.js
+│   │   │   ├── todoReducer.js
+│   │   │   └── ...
+│   │   ├── sagas/
+│   │   │   ├── todoSaga.js
+│   │   │   └── ...
+│   │   ├── selectors/
+│   │   │   ├── todoSelectors.js
+│   │   │   └── ...
+│   │   ├── store.js
+│   │   └── ...
+│   │
+│   ├── services/
+│   │   ├── api.js
+│   │   └── ...
+│   │
+│   ├── utils/
+│   │   ├── validation.js
+│   │   └── ...
+│   │
+│   ├── App.js
+│   ├── index.js
+│   └── ...
+│
+├── package.json
+├── README.md
+└── ...
+
+src/: Chứa mã nguồn của ứng dụng.
+components/: Các thành phần UI tái sử dụng.
+containers/: Các thành phần điều khiển việc hiển thị và logic kinh doanh.
+store/: Chứa Redux store, actions, reducers, selectors, và saga nếu sử dụng.
+services/: Các dịch vụ (như API).
+utils/: Các hàm tiện ích và validation.
+App.js: File gốc của ứng dụng.
