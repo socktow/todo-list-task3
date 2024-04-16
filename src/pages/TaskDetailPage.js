@@ -9,11 +9,14 @@ import InputLabel from '@mui/material/InputLabel';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { deleteTask, updateTask } from '../services/api';
 
+import './styles/TaskDetailPage.css'; 
+
 const TaskDetailPage = () => {
   const { taskId } = useParams();
   const [task, setTask] = useState(null);
   const [editable, setEditable] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,23 +32,23 @@ const TaskDetailPage = () => {
     fetchTask();
   }, [taskId]);
 
-  // Function to handle changes in task fields
-  const handleChange = (field, value) => {
-    setTask({ ...task, [field]: value });
-  };
-
-  const handleEdit = () => {
-    setEditable(true);
-  };
+  const handleEdit = () => setEditable(true);
 
   const handleSave = async () => {
     try {
-      await updateTask(task);
+      setLoading(true);
+      await updateTask(taskId, task);
       setEditable(false);
+
+      setTimeout(() => {
+        setLoading(false);
+        navigate('/');
+      }, 2500);
     } catch (error) {
       console.error('Error updating task:', error);
+      setLoading(false);
     }
-  };
+  };  
 
   const handleDelete = async () => {
     try {
@@ -66,7 +69,7 @@ const TaskDetailPage = () => {
             variant="outlined"
             fullWidth
             value={task.title}
-            onChange={(e) => handleChange('title', e.target.value)}
+            onChange={(e) => setTask({ ...task, title: e.target.value })}
             disabled={!editable}
           />
           <TextField
@@ -74,7 +77,7 @@ const TaskDetailPage = () => {
             variant="outlined"
             fullWidth
             value={task.creator}
-            onChange={(e) => handleChange('creator', e.target.value)}
+            onChange={(e) => setTask({ ...task, creator: e.target.value })}
             disabled={!editable}
           />
           <TextField
@@ -84,14 +87,14 @@ const TaskDetailPage = () => {
             multiline
             rows={4}
             value={task.description}
-            onChange={(e) => handleChange('description', e.target.value)}
+            onChange={(e) => setTask({ ...task, description: e.target.value })}
             disabled={!editable}
           />
           <FormControl fullWidth>
             <InputLabel>Status</InputLabel>
             <Select
               value={task.status}
-              onChange={(e) => handleChange('status', e.target.value)}
+              onChange={(e) => setTask({ ...task, status: e.target.value })}
               disabled={!editable}
             >
               <MenuItem value="New">New</MenuItem>
@@ -119,6 +122,7 @@ const TaskDetailPage = () => {
               <Button variant="outlined" onClick={() => setConfirmDelete(false)}>Cancel</Button>
             </div>
           )}
+          {loading && <div className="loading-animation">Loading...</div>} {/* Hiển thị hiệu ứng loading nếu đang loading */}
         </div>
       ) : (
         <div>Loading...</div>

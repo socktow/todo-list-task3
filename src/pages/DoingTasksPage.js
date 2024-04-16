@@ -30,7 +30,18 @@ const DoingTasksPage = ({ searchValue }) => {
 
     fetchDoingTasks();
   }, [searchValue]);
-
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "New":
+        return "red";
+      case "Doing":
+        return "yellow";
+      case "Done":
+        return "green";
+      default:
+        return "white"; // Default color
+    }
+  };
   return (
     <div>
       <h1>Doing Tasks</h1>
@@ -43,12 +54,17 @@ const DoingTasksPage = ({ searchValue }) => {
               </Link>
               <Typography variant="body1">Creator: {task.creator}</Typography>
               <Typography variant="body1">Description: {task.description}</Typography>
-              <Typography variant="body1">Status: {task.status}</Typography>
               <Typography variant="body1">
                 Created At: {new Date(task.createdAt).getDate()}/
                 {new Date(task.createdAt).getMonth() + 1}/
                 {new Date(task.createdAt).getFullYear()}
               </Typography>
+              <Typography variant="body1"                 style={{
+                  backgroundColor: getStatusColor(task.status),
+                  color: "white",
+                  padding: "2px 5px",
+                  borderRadius: "4px",
+                }}>Status: {task.status}</Typography>
             </Paper>
           </Grid>
         ))}

@@ -1,53 +1,79 @@
 // pages/DoneTasksPage.js
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Grid, Paper, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Grid, Paper, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 const DoneTasksPage = ({ searchValue }) => {
   const [doneTasks, setDoneTasks] = useState([]);
 
   useEffect(() => {
     const fetchDoneTasks = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/tasks');
+        const response = await axios.get("http://localhost:3001/tasks");
         const tasks = response.data;
-        let filteredTasks = tasks.filter(task => task.status === 'Done');
+        let filteredTasks = tasks.filter((task) => task.status === "Done");
 
         // Apply search filter if searchValue exists
         if (searchValue) {
-          filteredTasks = filteredTasks.filter(task =>
-            task.title.toLowerCase().includes(searchValue.toLowerCase()) ||
-            task.creator.toLowerCase().includes(searchValue.toLowerCase()) ||
-            task.description.toLowerCase().includes(searchValue.toLowerCase())
+          filteredTasks = filteredTasks.filter(
+            (task) =>
+              task.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+              task.creator.toLowerCase().includes(searchValue.toLowerCase()) ||
+              task.description.toLowerCase().includes(searchValue.toLowerCase())
           );
         }
 
         setDoneTasks(filteredTasks);
       } catch (error) {
-        console.error('Error fetching done tasks:', error);
+        console.error("Error fetching done tasks:", error);
       }
     };
 
     fetchDoneTasks();
   }, [searchValue]);
-
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "New":
+        return "red";
+      case "Doing":
+        return "yellow";
+      case "Done":
+        return "green";
+      default:
+        return "white"; // Default color
+    }
+  };
   return (
     <div>
       <h1>Done Tasks</h1>
       <Grid container spacing={2}>
-        {doneTasks.map(task => (
+        {doneTasks.map((task) => (
           <Grid item key={task.id} xs={12} sm={6} md={4}>
-            <Paper style={{ padding: '10px' }}>
-            <Link to={`/tasks/${task.id}`} style={{ textDecoration: 'none' }}>
-                <Typography variant="h6" style={{ cursor: 'pointer' }}>{task.title}</Typography>
+            <Paper style={{ padding: "10px" }}>
+              <Link to={`/tasks/${task.id}`} style={{ textDecoration: "none" }}>
+                <Typography variant="h6" style={{ cursor: "pointer" }}>
+                  {task.title}
+                </Typography>
               </Link>
               <Typography variant="body1">Creator: {task.creator}</Typography>
-              <Typography variant="body1">Description: {task.description}</Typography>
-              <Typography variant="body1">Status: {task.status}</Typography>
               <Typography variant="body1">
-                Created At: {new Date(task.createdAt).getDate()}/
-                {new Date(task.createdAt).getMonth() + 1}/
-                {new Date(task.createdAt).getFullYear()}
+                Description: {task.description}
+              </Typography>
+                <Typography variant="body1">
+                  Created At: {new Date(task.createdAt).getDate()}/
+                  {new Date(task.createdAt).getMonth() + 1}/
+                  {new Date(task.createdAt).getFullYear()}
+                </Typography>
+              <Typography
+                variant="body1"
+                style={{
+                  backgroundColor: getStatusColor(task.status),
+                  color: "white",
+                  padding: "2px 5px",
+                  borderRadius: "4px",
+                }}
+              >
+                Status: {task.status}
               </Typography>
             </Paper>
           </Grid>
