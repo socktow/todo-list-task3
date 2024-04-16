@@ -38,8 +38,8 @@ const CreateTaskForm = () => {
       setDescription('');
       setStatus('New');
 
-      // Optionally, you can redirect user to another page after save
-      // window.location.href = '/'; // Redirect to homepage
+      // Redirect user to homepage after save
+      window.location.href = '/';
     } catch (error) {
       // Handle error
       console.error('Error saving task:', error);
@@ -53,7 +53,6 @@ const CreateTaskForm = () => {
     setDescription('');
     setStatus('New');
   };
-
 
   return (
     <div style={{ padding: '10px' }}>

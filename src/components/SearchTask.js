@@ -1,15 +1,14 @@
-// components/SearchTask.js
 import React, { useState } from 'react';
 import { Input } from 'antd';
 
 const { Search } = Input;
 
-const SearchTask = ({ onSearch }) => {
+const SearchTask = ({ onSearch }) => { // Thêm props onSearch
   const [searchValue, setSearchValue] = useState('');
 
   const handleSearch = (value) => {
     setSearchValue(value);
-    onSearch(value);
+    onSearch(value); // Gọi hàm onSearch và truyền giá trị tìm kiếm lên component cha
   };
 
   return (

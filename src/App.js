@@ -1,26 +1,31 @@
-// App.js
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import AllTasksPage from './pages/AllTasksPage';
 import NewTasksPage from './pages/NewTasksPage';
 import DoingTasksPage from './pages/DoingTasksPage';
 import DoneTasksPage from './pages/DoneTasksPage';
 import TaskDetailPage from './pages/TaskDetailPage';
-import CreateTaskPage from './pages/CreateTaskPage'; // Đảm bảo đường dẫn đến trang CreateTaskPage là chính xác
+import CreateTaskPage from './pages/CreateTaskPage';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/system';
+import SearchTask from './components/SearchTask';
 
-// Styled button for custom styles
 const CustomButton = styled(Button)({
   margin: '0 10px',
 });
 
 function App() {
+  const [searchValue, setSearchValue] = useState('');
+
+  const handleSearch = (value) => {
+    setSearchValue(value);
+  };
+
   return (
     <Router>
       <div>
-        <Header />
+        <Header onSearch={handleSearch} />
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
           <CustomButton component={Link} to="/" variant="contained" color="primary">All Tasks</CustomButton>
           <CustomButton component={Link} to="/new" variant="contained" color="secondary">New</CustomButton>
@@ -28,12 +33,13 @@ function App() {
           <CustomButton component={Link} to="/done" variant="contained" color="success">Done</CustomButton>
         </div>
         <Routes>
-          <Route path="/" element={<AllTasksPage />} />
-          <Route path="/new" element={<NewTasksPage />} />
-          <Route path="/doing" element={<DoingTasksPage />} />
-          <Route path="/done" element={<DoneTasksPage />} />
-          <Route path="/tasks/:id" element={<TaskDetailPage />} />
+          <Route path="/" element={<AllTasksPage searchValue={searchValue} />} />
+          <Route path="/new" element={<NewTasksPage searchValue={searchValue} />} />
+          <Route path="/doing" element={<DoingTasksPage searchValue={searchValue} />} />
+          <Route path="/done" element={<DoneTasksPage searchValue={searchValue} />} />
+          <Route path="/tasks/:taskId" element={<TaskDetailPage />} />
           <Route path="/create-task" element={<CreateTaskPage />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
     </Router>

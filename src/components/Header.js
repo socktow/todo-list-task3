@@ -1,10 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Button from '@mui/material/Button';
 import { styled } from '@mui/system';
 import SearchTask from './SearchTask';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate instead of useHistory
+import { AppBar, Toolbar, Button } from '@mui/material';
 
 const FlexContainer = styled('div')({
   display: 'flex',
@@ -13,18 +11,17 @@ const FlexContainer = styled('div')({
   width: '100%',
 });
 
-const Header = () => {
+const Header = ({ onSearch }) => {
+  const navigate = useNavigate(); // Use useNavigate instead of useHistory
   return (
     <AppBar position="static">
       <Toolbar>
         <FlexContainer>
           <div className="header-left">
-            {/* Nút tạo task mới */}
             <Button component={Link} to="/create-task" variant="contained" color="secondary">Create Task</Button>
           </div>
           <div className="header-right">
-            {/* Thanh search */}
-            <SearchTask />
+            <SearchTask onSearch={onSearch} />
           </div>
         </FlexContainer>
       </Toolbar>

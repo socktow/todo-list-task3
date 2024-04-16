@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Grid, Paper, Typography, TextField, Button } from "@mui/material";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import {
+  Grid,
+  Paper,
+  Typography
+} from "@mui/material";
 
-const AllTasksPage = () => {
+const AllTasksPage = ({ searchValue }) => {
   const [tasks, setTasks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const tasksPerPage = 9;
-  const navigate = useNavigate(); // Sử dụng useNavigate thay cho useHistory
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -23,16 +25,38 @@ const AllTasksPage = () => {
     fetchTasks();
   }, []);
 
+  useEffect(() => {
+    // Logic to filter tasks based on searchValue
+    // Update tasks state with filtered tasks
+  }, [searchValue]); // Re-run effect when searchValue changes
+  
+  // Filter tasks based on searchValue
+  const filteredTasks = tasks.filter(task =>
+    task.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+    task.creator.toLowerCase().includes(searchValue.toLowerCase()) ||
+    task.description.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
   // Calculate indexes of tasks to display on the current page
   const indexOfLastTask = currentPage * tasksPerPage;
   const indexOfFirstTask = indexOfLastTask - tasksPerPage;
-  const currentTasks = tasks.slice(indexOfFirstTask, indexOfLastTask);
+  const currentTasks = filteredTasks.slice(indexOfFirstTask, indexOfLastTask);
 
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const handleTaskDetail = (taskId) => {
-    navigate(`/tasks/${taskId}`);
+  // Function to get background color for status
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "New":
+        return "red";
+      case "Doing":
+        return "yellow";
+      case "Done":
+        return "green";
+      default:
+        return "white"; // Default color
+    }
   };
 
   return (
@@ -42,54 +66,29 @@ const AllTasksPage = () => {
         {currentTasks.map((task) => (
           <Grid item key={task.id} xs={12} sm={6} md={4}>
             <Paper style={{ padding: "10px", position: "relative" }}>
-              <Typography variant="h6">{task.title}</Typography>
+              <Link to={`/tasks/${task.id}`} style={{ textDecoration: 'none' }}>
+                <Typography variant="h6" style={{ cursor: 'pointer' }}>{task.title}</Typography>
+              </Link>
               <Typography variant="body1">Creator: {task.creator}</Typography>
               <Typography variant="body1">
                 Description: {task.description}
               </Typography>
-              <Typography variant="body1">Status: {task.status}</Typography>
-              <SettingsOutlinedIcon
-                style={{
-                  position: "absolute",
-                  top: "5px",
-                  right: "5px",
-                  cursor: "pointer",
-                }}
-                onClick={() => handleTaskDetail(task.id)}
-              />
+              <Typography variant="body1" style={{ backgroundColor: getStatusColor(task.status), color: "white", padding: "2px 5px", borderRadius: "4px" }}>Status: {task.status}</Typography>
             </Paper>
           </Grid>
         ))}
       </Grid>
+      {/* Pagination buttons */}
       <div style={{ textAlign: "center", marginTop: "20px" }}>
-        <Button
-          disabled={currentPage === 1}
-          onClick={() => paginate(currentPage - 1)}
-          style={{ marginRight: "10px" }}
-        >
+        <button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>
           Previous
-        </Button>
-        <TextField
-          label="Page"
-          type="number"
-          value={currentPage}
-          onChange={(e) => paginate(parseInt(e.target.value))}
-          InputProps={{
-            inputProps: { min: 1, max: Math.ceil(tasks.length / tasksPerPage) },
-          }}
-          style={{ marginRight: "10px" }}
-        />
-        <Typography variant="body1" component="span">
-          of {Math.ceil(tasks.length / tasksPerPage)}
-        </Typography>
-        <Button
-          disabled={currentPage === Math.ceil(tasks.length / tasksPerPage)}
-          onClick={() => paginate(currentPage + 1)}
-          style={{ marginLeft: "10px" }}
-        >
+        </button>
+        <span>{currentPage}</span>
+        <button onClick={() => paginate(currentPage + 1)} disabled={currentTasks.length < tasksPerPage}>
           Next
-        </Button>
+        </button>
       </div>
+      {/* Search results display */}
     </div>
   );
 };
