@@ -29,6 +29,7 @@
     "sass": "^1.41.1",
     "web-vitals": "^2.1.4"
   },
+<<<<<<< HEAD
 "scripts": {
   "start": "concurrently \"npm run start-react\" \"json-server --watch db.json --port 3001\" ",
   "start-react": "react-scripts start",
@@ -36,6 +37,15 @@
   "test": "react-scripts test",
   "eject": "react-scripts eject"
 },
+=======
+  "scripts": {
+    "start": "concurrently \"npm run start-react\" \"json-server --watch db.json --port 3001\" ",
+    "start-react": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+>>>>>>> 0f8291078cf5bd93082cae9f1f2584c4aa52d892
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -53,5 +63,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }
