@@ -1,21 +1,33 @@
 /* TaskDetailPage.css */
 
 .loading-animation {
-    font-size: 24px;
-    color: #333;
-    margin-top: 20px;
-    animation: fadeInOut 2s linear infinite; /* Áp dụng hiệu ứng fadeInOut trong 2 giây vô hạn */
+  font-size: 24px;
+  color: #333;
+  margin-top: 20px;
+  animation: fadeInOut 2s linear infinite; /* Áp dụng hiệu ứng fadeInOut trong 2 giây vô hạn */
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
   }
-  
-  @keyframes fadeInOut {
-    0% {
-      opacity: 0;
-    }
-    50% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
-    }
+  50% {
+    opacity: 1;
   }
-  
+  100% {
+    opacity: 0;
+  }
+}
+.modal-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.confirm-delete-modal {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 8px;
+}

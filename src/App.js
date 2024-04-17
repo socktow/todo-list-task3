@@ -9,7 +9,6 @@ import TaskDetailPage from './pages/TaskDetailPage';
 import CreateTaskPage from './pages/CreateTaskPage';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/system';
-import SearchTask from './components/SearchTask';
 
 const CustomButton = styled(Button)({
   margin: '0 10px',

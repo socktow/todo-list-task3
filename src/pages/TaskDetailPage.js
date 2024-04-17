@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { deleteTask, updateTask } from '../services/api';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import Modal from "@mui/material/Modal"; // Import Modal
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { deleteTask, updateTask } from "../services/api";
 
-import './styles/TaskDetailPage.css'; 
+import "./styles/TaskDetailPage.css";
 
 const TaskDetailPage = () => {
   const { taskId } = useParams();
@@ -22,10 +23,12 @@ const TaskDetailPage = () => {
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/tasks/${taskId}`);
+        const response = await axios.get(
+          `http://localhost:3001/tasks/${taskId}`
+        );
         setTask(response.data);
       } catch (error) {
-        console.error('Error fetching task:', error);
+        console.error("Error fetching task:", error);
       }
     };
 
@@ -42,25 +45,32 @@ const TaskDetailPage = () => {
 
       setTimeout(() => {
         setLoading(false);
-        navigate('/');
+        navigate("/");
       }, 2500);
     } catch (error) {
-      console.error('Error updating task:', error);
+      console.error("Error updating task:", error);
       setLoading(false);
     }
-  };  
+  };
 
   const handleDelete = async () => {
     try {
       await deleteTask(taskId);
-      navigate('/');
+      setConfirmDelete(false); // Close the confirmation modal
+      setLoading(true); // Start loading animation
+
+      // Simulate deletion process
+      setTimeout(() => {
+        setLoading(false);
+        navigate("/");
+      }, 1500);
     } catch (error) {
-      console.error('Error deleting task:', error);
+      console.error("Error deleting task:", error);
     }
   };
 
   return (
-    <div style={{ textAlign: 'center' }}>
+    <div style={{ textAlign: "center" }}>
       {task ? (
         <div>
           <h1>Task Detail: {taskId}</h1>
@@ -103,26 +113,75 @@ const TaskDetailPage = () => {
             </Select>
           </FormControl>
           {!editable ? (
-            <div style={{ margin: '20px' }}>
-              <Button variant="contained" color="primary" onClick={handleEdit}>Edit</Button>{' '}
-              <Button variant="contained" color="error" onClick={() => setConfirmDelete(true)}>Delete</Button>
-              <Button variant="outlined" color="primary" component={Link} to="/">Back</Button>
+            <div style={{ margin: "20px" }}>
+              <Button variant="contained" color="primary" onClick={handleEdit}>
+                Edit
+              </Button>{" "}
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => setConfirmDelete(true)}
+              >
+                Delete
+              </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                component={Link}
+                to="/"
+              >
+                Back
+              </Button>
             </div>
           ) : (
-            <div style={{ margin: '20px' }}>
-              <Button variant="contained" color="primary" onClick={handleSave}>Save</Button>{' '}
-              <Button variant="outlined" onClick={() => setEditable(false)}>Cancel</Button>
-              <Button variant="outlined" color="primary" component={Link} to="/">Back</Button>
+            <div style={{ margin: "20px" }}>
+              <Button variant="contained" color="primary" onClick={handleSave}>
+                Save
+              </Button>{" "}
+              <Button variant="outlined" onClick={() => setEditable(false)}>
+                Cancel
+              </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                component={Link}
+                to="/"
+              >
+                Back
+              </Button>
             </div>
           )}
-          {confirmDelete && (
-            <div style={{ margin: '20px' }}>
-              <p>Are you sure you want to delete this task?</p>
-              <Button variant="contained" color="error" onClick={handleDelete}>Confirm</Button>{' '}
-              <Button variant="outlined" onClick={() => setConfirmDelete(false)}>Cancel</Button>
+          <Modal
+            open={confirmDelete}
+            onClose={() => setConfirmDelete(false)}
+            aria-labelledby="modal-title"
+            aria-describedby="modal-description"
+            className="modal-container" // Thêm class modal-container
+          >
+            <div className="confirm-delete-modal">
+              <h2 id="modal-title">Confirm Delete</h2>
+              <p id="modal-description">
+                Are you sure you want to delete this task?
+              </p>
+              <div>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleDelete}
+                >
+                  Confirm
+                </Button>{" "}
+                <Button
+                  variant="outlined"
+                  onClick={() => setConfirmDelete(false)}
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
-          )}
-          {loading && <div className="loading-animation">Loading...</div>} {/* Hiển thị hiệu ứng loading nếu đang loading */}
+          </Modal>
+
+          {loading && <div className="loading-animation">Loading...</div>}
         </div>
       ) : (
         <div>Loading...</div>

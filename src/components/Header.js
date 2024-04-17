@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from '@mui/system';
 import SearchTask from './SearchTask';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate instead of useHistory
+import { Link } from 'react-router-dom';
 import { AppBar, Toolbar, Button } from '@mui/material';
 
 const FlexContainer = styled('div')({
@@ -12,7 +12,6 @@ const FlexContainer = styled('div')({
 });
 
 const Header = ({ onSearch }) => {
-  const navigate = useNavigate(); // Use useNavigate instead of useHistory
   return (
     <AppBar position="static">
       <Toolbar>
